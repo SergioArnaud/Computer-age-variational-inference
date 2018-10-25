@@ -14,27 +14,28 @@ Desde los años treinta, y sobre todo con el advenimiento de la segunda guerra m
 
 
 
-Desde el paper original, Shannon alude a la teoría desarrollada medio siglo antes por Ludwig Boltzmann, de donde toma el término *entropía*. En el paper original, define la entropía $H$ de una variable aleatoria discreta con soporte finito y masa $$\mathbf{p}$$ 
+Desde el paper original, Shannon alude a la teoría desarrollada medio siglo antes por Ludwig Boltzmann, de donde toma el término *entropía*. En el paper original, define la entropía $H$ de una variable aleatoria discreta con soporte finito y masa $p$ 
 $$
-H = -K\sum_{i=1}^np_i\log_b p_i
+H(X) = -\sum_{x\in\mathcal{X}}p(x_i)\log p(x_i)
 $$
-Shannon buscaba en $H$ una manera de medir qué tan seguros estamos de los valores de una muestra, conociendo su distribución. En particular, es la función tal que
-
-1. Es no negativa
-
-2. Es cero si y sólo si $X$ toma un valor con probabilidad 1.
-
-3. Es máxima cuando todos los eventos son equiprobables, pues la información inicial es mínima.
-
-4. Si $X_1$ y $X_2$ son muestras independientes, su entropía total es la suma de ambas.
-
-5. Le da más importancia a los eventos de probabilidad pequeña. 
+Shannon buscaba en $H$ una manera de medir qué tan seguros estamos de los valores de una muestra, conociendo su distribución. La idea es aprovechar la estructura $\sigma$-aditiva del espacio de probabilidad subyacente para dar información antítona a la probabilidad: los eventos más raros deberían dar más información. Puede probarse que la función que resuelve este problema (es antitética a la probabilidad en el sentido de que eventos más raros dan más información) es
+$$
+I(x) = \log \left( \frac{1}{p(x)}\right)
+$$
 
 
+En este caso, la entropía de Shannon es
+$$
+H(X) = \mathbb{E}[I(X)]
+$$
+Algunas observaciones pertinentes:
 
-   Para entender mejor la necesidad de esta medición, seguimos un ejemplo de [2] que conecta la entropía de Shannon con la divergencia de Kullback-Leibler.
+1. $H$ es no negativa
+2. $H$ es cero si y sólo si $X$ toma un valor con probabilidad 1.
+3. $H$ es máxima cuando todos los eventos son equiprobables, pues la información inicial es mínima.
+4. Si $X_1$ y $X_2$ son muestras independientes, su entropía total es la suma de ambas entropías.
 
-
+Para entender mejor esta función, y conectarla con la divergencia de Kullback-Leibler, seguimos el camino de [2].
 
 ## Teoría de códigos
 
@@ -54,7 +55,7 @@ Notemos que podemos invertir el costo, de manera que la longitud de una palabra 
 
 Partiendo del teorema y un mensaje $M$, si tuviéramos el código óptimo para expresar eventos con masa $\mathbf{p}$, hay un límite a qué tan pequeñas podemos hacer, en promedio, la longitud de $M$: la entropía.
 $$
-H(\mathbf{p})= -\sum_{i=1}^np_i\log_2p_i = \mathbb{E}[\textrm{Longitud de $M$}]
+H(\mathbf{p})= -\sum_{i=1}^np_i\log_2p_i
 $$
 En el mismo contexto, supongamos que recibimos también mensajes de otro evento en el mismo corpus, esta vez con masa $\mathbf{q}$. Si se utilizara el mismo código para enviar mensajes de este evento que del primero, no estaríamos optimizando necesariamente (pues por definición, las las palabras están elegidas para minimizar con respecto a eventos de $\mathbf{p}$. 
 
@@ -68,7 +69,7 @@ la longitud promedio de un mensaje que comunica eventos de $\mathbf{q}$ usando u
 
 > **Observación**
 >
-> $$H_\mathbf{p}(\mathbf{q}) \neq H_\mathbf{q}(\mathbf{p})$$. Un evento común en una y raro en la otra arruina la optimali de los códigos elegidos. 
+> $$H_\mathbf{p}(\mathbf{q}) \neq H_\mathbf{q}(\mathbf{p})$$. Un evento común en una y raro en la otra arruina la optimalidad de los códigos elegidos. 
 
 
 
@@ -80,23 +81,44 @@ y para interpretarlo, notemos que el término con logaritmo es la diferencia de 
 
 
 
-> **Observación**
+> **Observaciones**
 >
-> Aunque aquí usamos distribuciones discretas, pueden hacerse los cambios usuales para trabajar con variables aleatorias continuas.
+> 1. Aunque aquí usamos distribuciones discretas, pueden hacerse los cambios intuitivos para trabajar con variables aleatorias continuas. Formalmente, con variables continuas el término es *entropía diferencial*, y cambia por las tecnicalidades de usar una densidad de probabilidad y no una masa.
+> 2. Hay toda una teoría general de divergencias, pero aquí nos limitamos a estudiar la de Kullback-Leibler.
 
+## Máxima verosimilitud – un modelo combinatorio
 
+Sea $X$ una variable nominal con masa de probabilidad $p$. Si obtenemos una muestra de $X$ y hacemos un histograma de sus valores. Si proponemos un modelo $q$ para $p$, podemos hacer una 
 
-## Inferencia bayesiana
+## Kullback-Leibler en inferencia bayesiana
 
 Si interpretamos $Q$ como la distribución *a priori* de $\theta$, $D_{KL}(P||Q)$ es la información ganada por usar la posterior $P$ en vez de $Q$. 
 
 
 
+> **Observación**
+>
+> La divergencia de Kullback-Leibler *no* satisface la desigualdad del triangulo. La información que ganamos de $\theta$ dados los valores de $X$ $\{x_1, x_2$,} puede ser mayor, menor o igual que la que ganamos dado $x_1$ solamente. 
+
+
+
 ## Información de discriminación
 
-La divergencia de Kullback-Leibler también tiene una interpretación frecuentista, y de hecho es la que Kullback prefería$^{[3]}$: *Información de discriminación*. 
+![Sollomon Kullback](img/kullback.jpg)
+
+La divergencia de Kullback-Leibler también tiene una interpretación en contrastes de hipótesis, y de hecho es la que Kullback prefería$^{[3]}$: *Información de discriminación*. Supongamos que quieren contrastarse las hipótesis $H_ 1vs. H_2$. Donde $H_i$ es $X\sim f_i$. 
+
+Cuando medimos que $X=x$,  del teorema de Bayes,
+$$
+\log\frac{f_1(x)}{f_2(x)} = \log \frac{\mathbb{P}\{H_1|X=x\}}{\mathbb{P}\{H_2|X=x\}} - \log \frac{\mathbb{P}\{H_1\}}{\mathbb{P}\{H_2\}}[\lambda]
+$$ { }
+El lado derecho de la expresión de arriba es una medida de la diferencia en información antes y después de considerar $X=x$, y al izquierdo, logaritmo del cociente de verosimilitudes lo nombramos *la información para discriminar en favor de $H_1$*. 
+
+La información para discriminar en favor de $H_1$ dado que $X=x$ y suponiendo $H_1$ es
 
 
+
+ 
 
 ## Máxima verosimilitud
 
@@ -104,6 +126,16 @@ La divergencia de Kullback-Leibler también tiene una interpretación frecuentis
 
 ## Geometría de la información
 
+La interpretación geométrico-diferencial de la esatdística se popularizó con el trabajo de Sun Ichi Amari. Aquí nos limitamos a dar una idea muy superficial, pues de otra manera habría que entrar en detalles no-triviales de geometría y álgebra multilineal:
+
+Una *variedad topológica* es un espacio localmente plano. (Formalmente, es un espacio Hausdorff paracompacto localmente homeomorfo a $\mathbb{R}^m$, y $m$ es su *dimensión*). La noción más inmediata del concepto es el planeta tierra: aunque vivimos en una esfera, localmente parece plano. Sólo cuando vemos al horzionte se nota la curvatura.
+
+Una variedad es *suave* si la transición entre sus mapas es infinitamente diferenciable. Una variedad suave es *Riemanniana* si en el espacio tangente a cada punto (intuitivamente piensen en la derivada, es algo plano que aproxima localmente) hay un producto interno definido y la transición entre ellos (de punto a punto) es diferenciable. Esta estructura permite definir una métrica en las variedades riemannianas: se mide el largo de una curva suave que conecta dos puntos.
+
+La geometría de la información considera variedades riemannianas donde cada punto es una medida de probabilidad. Su métrica riemanniana correspondiente es la matriz de información de Fischer, que bajo algunas condiciones de regularidad tiene entradas
+$$
+\mathcal{I}(\theta)_{ij} = - \mathbb{E}\left[\frac{\partial^2}{\partial\theta_i\partial\theta_j}f(x;\theta) | \theta\right]
+$$
 
 
 ## 
