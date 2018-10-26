@@ -28,6 +28,8 @@ Y con esta notación (que aunque aquí se vea rara, será útil más adelante),
 $$
 H(p) = \mathbb{E}[I(X)]
 $$
+A $I$ se le llama *contenido de información*. (Como nota, la base del logaritmo es irrelevante, pero usualmente se toma $2$ para bits o $e$ para unidades naturales).
+
 Algunas observaciones pertinentes:
 
 1. $H$ es no negativa
@@ -78,7 +80,7 @@ y para interpretarlo, notemos que el término con logaritmo es la diferencia de 
 
 ## Información de discriminación
 
-La divergencia de Kullback-Leibler también tiene una interpretación en contrastes de hipótesis, y de hecho, Kullback la llamaba por ese nombre$^{[3]}$: *Información de discriminación*.  (Fue Trevor Hastie quien popularizó el término "Divergencia de Kullback-Leibler", pero Kullback nunca se refiere a ella así en su libro). 
+La divergencia de Kullback-Leibler también tiene una interpretación en contrastes de hipótesis, y de hecho, Kullback la llamaba por ese nombre$^{[3]}$: *Información de discriminación*.  Fue Trevor Hastie quien popularizó el término "Divergencia de Kullback-Leibler", pero Kullback nunca se refiere a ella así en su libro [4], de donde tomamos esta exposición.  (De hecho, usa el término *divergencia* para una versión simetrizada de lo que nosotros usamos).
 
 Supongamos que quieren contrastarse las hipótesis
 $$
@@ -103,46 +105,71 @@ $$
 $$
 Y esto no es otra cosa que $D_{KL}(F_2||F_1)$: la divergencia de Kullback-Leibler de $F_1$ a $F_2$. 
 
-## Kullback-Leibler como ganancia de información: *Machine learning*  y estadística bayesiana
+## Ganancia de información
 
-Si interpretamos $Q$ como la distribución *a priori* de $\theta$, $D_{KL}(P||Q)$ es la información ganada por usar la posterior $P$ en vez de $Q$. 
+En aprendizaje de máquina, la *información ganada sobre* $X$  *por observar que* $A=a$ es
+$$
+IG_{X|A}(X,a)=H(F_X)-H(F_x|A=a)
+$$
+donde $H$ es la entropía de Shannon y $H(\cdot | A)$ es la *entropía condicionada a* $A$ (que se define de manera muy natural con la formulación de contenido de información: $\mathbb{E}[I(X)|A=a]$). Como es de esperar, también hay una conexión rápida a la divergencia de Kullback-Leibler:
+$$
+IG_{X|A}(X,a) = D_{KL}(P_X(x|A=a)||P_X(x|I))
+$$
+La información ganada es la divergencia de Kullback-Leibler de la *a priori* de X a la posterior de $X$ dado $A$, y mide qué tanta "certidumbre" ganamos . (en forma de información del fenómeno). Claro que esta discusión induce naturalmente la extensión bayesiana.
 
-> **Observación**
->
-> La divergencia de Kullback-Leibler *no* satisface la desigualdad del triangulo. La información que ganamos de $\theta$ dados los valores de $X$ $\{x_1, x_2$,} puede ser mayor, menor o igual que la que ganamos dado $x_1$ solamente. 
+En este punto conviene introducir la expresión equivalente
+$$
+D_{KL}(p||q) = \mathbb{E}[\log p-\log q]
+$$
+y se lee como "los bits de información perdidos, en promedio".
 
+##Extensión bayesiana
 
-
-
-
- 
+Si hacemos $A=\theta$ con la notación usual de un modelo, estamos midiendo la información que ganamos por usar la posterior y no la *a priori*. Desde otro ángulo, $D_{KL}(P||Q)$ es la cantidad de información que perdemos por estimar a $P$, la verdadera posterior, con $Q$. 
 
 ## Máxima verosimilitud
 
+También hay un camino frecuentista para construir la divergencia$^{[5]}$. 
 
+Sea $\underline{X}_{(n)}$ una muestra aleatoria de $X\sim q$, y supóngase que tenemos dos modelos para $q$: $p_0$ y $p_1$. La estadística de cociente de verosimilitudes es
+$$
+\Lambda = \prod_{i=1}^n\frac{p_1(x_i)}{p_0(x_i)}
+$$
+Y para normalizar con respecto al número de observaciones, se toma
+$$
+\dot{\Lambda}_n = \frac{1}{n}\sum_{i=1}^n\log\frac{p_1(x_i)}{p_0(x_i)}
+$$
+Por la ley fuerte de los grandes números, $\dot{\Lambda}_n \xrightarrow{c.s} \mathbb{E}[\dot{\Lambda}]$, donde $\dot{\Lambda}$ tiene densidad $f(x) = \log p_1(x)-\log p_0(x)$. Haciendo la cuenta,
+$$
+\mathbb{E}[\dot{\Lambda}] = D_{KL}(q||p_0)-D_{KL}(q||p_1)
+$$
+Es decir, la prueba de cociente de verosimilitud elige comparando la diferencia entre ambas divergencias (la diferencia en la cantidad de información perdida por aproximar con otra densidad) con el valor $\lambda$ de la estadística de prueba. Además, cuando $\lambda=0$ elige el modelo más "cerca" de  $q$ en el sentido de Kullback-Leibler.
 
-## Geometría de la información
+##Geometría de la información
 
+En casi todos los contextos estudiados, la divergencia de Kullback-Leibler mide una especie de distancia o similaridad entre distribuciones. Sin embargo, no es simétrica, y entonces no puede ser una métrica en la forma obvia. Más aún: no satisface la desigualdad del triángulo (por lo que pueden pasar cosas como perder información mientras más observaciones se tengan, en el contexto bayesiano).  
 
+Por suerte, la intuición de medir distancia sí puede usarse, pero en un espacio un poco más complicado. Curiosamente, fue en este contexto geométrico cuando por primera vez se introdujo la divergencia de Kullback-Leibler, y fue en el importante paper de Harold Jeffreys *Una forma invariante para la a priori en problemas de estimación*$^{[7]}$, donde introdujo su *a priori* no informativa.
 
 Una *variedad topológica* es un espacio localmente plano. (Formalmente, es un espacio Hausdorff paracompacto localmente homeomorfo a $\mathbb{R}^m$, y $m$ es su *dimensión*). La noción más inmediata del concepto es el planeta tierra: aunque vivimos en una esfera, localmente parece plano. Sólo cuando vemos al horzionte se nota la curvatura.
 
-Una variedad es *suave* si la transición entre sus mapas es infinitamente diferenciable. Una variedad suave es *Riemanniana* si en el espacio tangente a cada punto (intuitivamente piensen en la derivada, es algo plano que aproxima localmente) hay un producto interno definido y la transición entre ellos (de punto a punto) es diferenciable. Esta estructura permite definir una métrica en las variedades riemannianas: se mide el largo de una curva suave que conecta dos puntos.
+Una variedad es *suave* si la transición entre los homeomorfismos es infinitamente diferenciable. Una variedad suave es *Riemanniana* si en el espacio tangente a cada punto (intuitivamente piense en la derivada, algo plano que aproxima localmente) hay un producto interno definido y la transición entre ellos (de punto a punto) es diferenciable. Esta estructura permite definir *geodésicas* en una variedad riemanniana: la extensión natural de recta como "trayectoria más corta entre dos puntos".
 
-La geometría de la información considera variedades riemannianas donde cada punto es una medida de probabilidad. Su métrica riemanniana correspondiente es la matriz de información de Fischer, que bajo algunas condiciones de regularidad tiene entradas
+La geometría de la información considera variedades riemannianas donde cada punto es una medida de probabilidad (*variedades estadísticas*). Su producto interno correspondiente es la matriz de información de Fischer en cada punto, que bajo algunas condiciones de regularidad tiene entradas
 $$
 \mathcal{I}(\theta)_{ij} = - \mathbb{E}\left[\frac{\partial^2}{\partial\theta_i\partial\theta_j}f(x;\theta) | \theta\right]
 $$
-Desarrollando un poco más la expresión
-$$
-\mathcal{I(\theta)}_{ij}= 
--\int_\mathcal{X}f(x;\theta)\frac{\partial^2\log f(x;\theta)}{\partial\theta_i\partial\theta_j}dx
-= \left( \frac{\partial^2}{\partial\theta'_i\partial\theta'_j}D_{KL}(\theta||\theta') \right)_{\theta'=\theta}
-$$
+Y haciendo la cuenta, la matriz de Fisher resulta ser en cada punto la Hessiana de la divergencia de Kullback-Leibler. Esto por fin formaliza (si uno en serio se avienta le geometría diferencial) la idea de medir cercanía: 
+
+>
+>
+>La distancia infinitesimal entre dos puntos en una variedad estadística es, salvo un error de orden cúbico, la diferencia de información entre ellos: su divergencia de Kullback-Leibler.
+
+La geometría de la información se dedica a estudiar esta conexión entre geometría diferencial y estadística.
 
 ## Galería
 
-![Sollomon Kullback](img/kullback.jpg) Sollomon Kullback
+![Solomon Kullback](img/kullback.jpg) Solomon Kullback
 
 ![Richard Leibler](img/leibler.jpg) Richard Leibler
 
@@ -157,3 +184,9 @@ $$
 [2] http://colah.github.io/posts/2015-09-Visual-Information/
 
 [3] (1987) Letters to the Editor, The American Statistician, 41:4, 338-341, DOI: 10.1080/00031305.1987.10475510
+
+[4] Kullback, Solomon. *Information Theory and Statistics*. Dover Publications, 1997.
+
+[5] Jonathon Shlens. *Notes on Kullback-Leibler Divergence and Likelihood*, 2014; [http://arxiv.org/abs/1404.2000 arXiv:1404.2000].
+
+[6] Jeffreys, Harold. *An invariant form for the prior probability in estimation problems*. Proc. R. Soc. Lond. A 1946 186 453-461; DOI: 10.1098/rspa.1946.0056. Published 24 September 1946
