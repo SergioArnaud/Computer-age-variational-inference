@@ -34,7 +34,7 @@ Algunas observaciones pertinentes:
 
 1. $H$ es no negativa
 2. $H$ es cero si y sólo si $X$ toma un valor con probabilidad 1.
-3. $H$ es máxima cuando todos los eventos son equiprobables, pues la información inicial es mínima .y los datos deber
+3. $H$ es máxima cuando todos los eventos son equiprobables, pues la información inicial es mínima .y los datos deben de algún modo proporcionar "la mayor información posible".
 4. Si $X_1$ y $X_2$ son muestras independientes, su entropía total es la suma de ambas entropías.
 
 Para entender mejor esta función, y conectarla con la divergencia de Kullback-Leibler, seguimos el camino de [2].
