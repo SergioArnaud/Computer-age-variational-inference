@@ -207,6 +207,14 @@ $$
 $$
 Así pues, elegir el mínimo criterio de Akaike es minimzar la divergencia de Kullback-Leibler entre nuestro modelo y los datos originales, dentro de una misma familia paramétrica. Nótese que esto quiere decir que si $g$ no está cerca de ser una $f_\theta$, el criterio de Akaike **no** lo informa. 
 
+
+
+## La asimetría de $D_{KL}$
+
+Aún con todas las interpretaciones de la divergencia de Kullback-Leibler que hemos visto, no tenemos todavía una manera naturalmente probabilística de entender la diferencia entre $D_{KL}(p||q)$  y $D_{KL}(q||p)$. 
+
+
+
 ## Galería
 
 ![Solomon Kullback](img/kullback.jpg) Solomon Kullback
