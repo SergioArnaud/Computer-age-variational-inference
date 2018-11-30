@@ -1,36 +1,16 @@
 ## Motivación
 
-Consideremos el modelo de inferencia bayesiana:
+Consideremos el problema típico de inferencia bayesiana:
 $$
-p(\theta \ | \ \ \textbf{x},\alpha) = \frac{p(\theta \ | \  \alpha) \ p(\textbf{x} \ | \ \ \theta, \alpha)}{p(\textbf{x} \ | \ \alpha)} \propto p(\theta \ | \  \alpha) \ p(\textbf{x} \ | \ \ \theta, \alpha)
+p(\theta  |  \mathbf{x}) \propto p(\theta |  \alpha) p(\mathbf{x}  | \theta)
 $$
-Donde:
+En muchos modelos bayesianos, la dificultad o imposibilidad para calcular $p(\mathbf{x})$ (que es una integral en dimensiones potencialmente altas) vuelve problemlático obtener una forma analítica de la distribución posterior. La técnica más común para aproximarla son los algoritmos de MCMC, que construyen una cadena de Markov sobre $\theta$  con distribución estacionaria $p(\theta  | \mathbf{x})$ para obtener, simulando, una muestra.
 
-- **x** es un vector de observaciones.
-- $\theta$ es el vector de parámetros del modelo.
-- $\alpha $ es el vector de hiperparámetros del modelo.
-
-A lo largo del trabajo se omitiran notacionalmente los hiperparámetros de forma que obtenemos el modelo:
+Pese a que los métodos de MCMC son una herramienta poderosa en el cómputo estadístico, hay ciertos problemas y contextos en los que fallan. En particular, es difícil determinar la convergencia, y en problemas muy complicados o de escala masiva pueden ser demasiado lentos para ser de utilidad práctica. Una alternativa más eficiente es la *inferencia variacional*, que replantea el problema como uno de optimización determinista al proponer una familia de densidades $\mathscr{Q}$ sobre $\theta$ y aproximar la distribución posterior $p$
 $$
-p(\theta \ | \ \textbf{x}) = \frac{p(\theta) \ p(\textbf{x} \ | \ \theta)}{p(\textbf{x})} \propto p(\theta) \ p(\textbf{x} \ | \ \theta)
+q^* = \underset{q \in \mathscr{Q}}{\arg\min} \{ D_{KL}(q  || p)\}
 $$
-Donde:
+Pese a la eficiencia en términos computacionales de la inferencia variacional, su uso no se ha extendido dentro de la comunidad estadística. Esto se debe en mayor medida a que utilizar inferencia variacional requiere de un diseño cuidadoso de la rutina de optimización: encontrar una familia variacional adecuada al modelo, obtener explícitamente la función objetivo, su gradiente y realizar un procedimiento de optimización. 
 
-- $p(\theta) $ es la _distribución a priori_ del parámetro.
-- $p(\mathbf{x}  \ | \ \theta)$ es la _distribución muestral_ de las observaciones condicionadas a los parámetros.
-- $p(\mathbf{x})  = \int p(\mathbf{x} \ | \ \theta)p(\theta) $ Es la _distribución marginal_ de las observaciones (también llamada _evidencia_).
-- $p(\theta \ | \ x)$ la _distribución posterior_ del parámetro.
+En este trabajo presentamos dos algoritmos que automatizan el proceso de optimización y una prueba cuantitativa de la convergencia del algoritmo. 
 
-Durante el proceso de inferencia bayesiana es de interés, dado un conjunto de observaciones, calcular la distribución posterior del parámetro. Sin embargo, en muchos modelos bayesianos la dificultar para calcular $p(x)$ imposibilita la obtención explícita  de la distribución posterior por lo que surge la idea de obtener una aproximación a dicha distribución.
-
-En éste contexto, la técnica más común está basada en algoritmos de MCMC que consisten en construir una cadena de Markov sobre $\theta$  con distribución estacionaria $p(\theta \ | \ x)$. Al simular dicha cadena, se obtiene una muestra de $p(\theta \ | \ x)$ tomando un subconjunto de los valores tomados por la cadena.
-
-Pese a que los métodos de MCMC son una de las herramientas más poderosa del cómputo estadístico, hay ciertos problemas y contextos en los que fallan. En general, esto ocurre cuando las simulaciones son computacionalmente intensivas, ya sea porque la cantidad de datos es masiva o porque los modelos son sumamente complejos, la _Inferencia variacional_ surge como una alternativa en dichos casos.  
-
-La inferencia variacional replantea el problema como uno de optimización al proponer una familia de densidades $\mathscr{F}$ sobre $\theta$ y aproximar la distribución posterior de $\theta$ con $q^*(\theta)$, donde $q^*(\theta)$ es la distribución en $\mathscr{F}$ más _cercana_ a $p(\theta \ | \ x)$ en el sentido de la divergencia de Kullback-Leibler, es decir:
-$$
-q^*(\theta) = \underset{q(\theta) \in \mathscr{F}}{argmin} \{ KL(q(\theta) \ || \ p(\theta \ | \ \mathbf{x}) )  \}
-$$
-Pese a la eficiencia en términos computacionales de la inferencia variacional, su uso no se ha extendido dentro de la comunidad estadística, esto se debe en mayor medida a que utilizar inferencia variacional requiere de un diseño cuidadoso de la rutina de optimización: encontrar una familia variacional adecuada al modelo, obtener explícitamente la función objetivo, su gradiente y realizar un procedimiento de optimización *ad hoc* al problema.
-
-La Inferencia variacional por diferenciación automática resuelve este problema automáticamente 
