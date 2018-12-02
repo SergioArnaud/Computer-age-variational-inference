@@ -152,3 +152,5 @@ dmypy.json
 *.jl.*.cov
 *.jl.mem
 deps/deps.jl
+
+*.html
