@@ -4,7 +4,13 @@ La inferencia variacional transforma el problema de muestreo a un problema de op
 $$
 q^* = \underset{q \in \mathscr{Q}}{\arg\min} \{ D_{KL}(q \ || \ \bar{p})  \}
 $$
-con una familia $\mathscr{Q}$ de funciones de probabilidad definida de antemano. Sin embargo, es imposible optimizar Kullback-Leibler de manera directa, pues
+donde $D_{KL}$ es la *divergencia de Kullback-Leibler*
+$$
+D_{KL}(q\ ||\ \bar{p}) = \mathbb{E}_{\theta \sim q}\left[\log\frac{q(\theta)}{\bar{p}(\theta)}\right]
+$$
+ y  $\mathscr{Q}$ una familia de funciones de probabilidad definida de antemano. En el apéndice A se explica con detalle la construcción y significado de la divergencia de Kullback-Leibler, pero por ahora basta saber que mide la cantidad de información perdida por utilizar $q$ en vez de $\bar{p}$. 
+
+Lamentablemente, es imposible optimizar Kullback-Leibler de manera directa, pues
 $$
 \begin{align}
 D_{KL}(q \ || \ \bar{p}) &= \mathbb{E}_{\theta\sim q}[\log q(\theta)] - 
@@ -39,13 +45,7 @@ ELBO(q) \leq \log p(x)
 $$
 > *Demostración*.
 >
-> Basta recordar que por ser una divergencia, $D_{KL}(q\ ||\ \bar{p}) \geq 0. \ \ _\square$
-
- 
-
-
-
-
+> Basta recordar que por ser una divergencia, $D_{KL}(q\ ||\ \bar{p}) \geq 0. \ \ _\square$ 
 
 
 
