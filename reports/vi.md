@@ -2,7 +2,7 @@
 
 La inferencia variacional transforma el problema de muestreo a un problema de optimización determinista. En particular, formula el prolema
 $$
-q^* = \underset{q \in \mathscr{Q}}{\arg\min} \{ D_{KL}(q \ || \ \bar{p})  \}
+q^* = \underset{q \in \mathscr{Q}}{\arg\min} \ D_{KL}(q \ || \ \bar{p})  
 $$
 donde $D_{KL}$ es la *divergencia de Kullback-Leibler*
 $$
