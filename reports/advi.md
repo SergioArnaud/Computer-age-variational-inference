@@ -192,3 +192,10 @@ advi(data=x, model=p(x,theta), mean_field=TRUE):
 ```
 
 Si se usa descenso en gradiente, ADVI tiene complejidad $\mathcal{O}(nMp)$ por iteración, donde $n$ es la cantidad de datos. En la variante estocástica con minibatch, pueden usarse $b\ll n$  puntos y baja a $\mathcal{O}(bMp)$ para escalar a datos masivos.
+
+#### Última nota
+
+¿Cómo elegir entre full-rank y mean-field? Los autores recomiendan utilizar full-rank sólo cuando interesan las covarianzas (y varianzas) posteriores, pues cuando sólo interesa la media posterior, mean-field es suficientemente bueno y sustancialmente más rápido.
+
+
+
