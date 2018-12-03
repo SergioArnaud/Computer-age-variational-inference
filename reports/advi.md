@@ -121,11 +121,13 @@ $$
 >
 > Apéndice C. $_\square$
 
+Es por las ecuaciones $(9)-(11)$ que ADVI trabaja con la clase de modelos diferenciables. Nótese que aunque no podíamos calcular el gradiente de la esperanza en (5), sí podemos calcular expresiones complicadas como $(9)-(11)$. Esto se debe a la diferenciación automática (la otra mitad en el nombre de ADVI), que por ser más una genialidad computacional que estadística evitamos aquí entrar en detalles y los desarrollamos en el apéndice B. Basta saber que los gradientes en $(9)-(11)$ son fáciles de evaluar, por lo que podemos usar descenso en gradiente.
+
 #### Una rutina de optimización
 
 Con una forma del gradiente conveniente para los métodos de Monte Carlo, basta elegir un algoritmo de optimización. En los modelos de altas dimensiones, un algoritmo debería adaptarse a la curvatura del espacio (siguiendo el trabajo de Sun Ichi Amari sobre la geometría de la información) y al mismo tiempo  dar pasos que decrezcan en magnitud suficientemente rápido. 
 
-Los autores de ADVI proponen el siguiente esquema:
+Los autores de ADVI proponen el siguiente esquema de ascenso en gradiente:
 
 En la iteración $i$, sean $\rho^{(i)}$ el tamaño del paso y $g^{(i)}$ el gradiente.  Definimos
 $$
@@ -137,7 +139,13 @@ s_k^{(i)}=\alpha\left(g^{(i)}_k\right)^2+(1-\alpha)s_k^{(i-1)} \\
 s_k^{(1)} = \left(g_k^{(1)}\right)^2
 $$
 
-El término $ \eta > 0$ determina la escala de la sucesión de pasos (o tasas de aprendizaje en jerga de aprendizaje). Los autores recomiendan elegir $\eta \in \{0.01, 0.1, 1, 10, 100\}$ usando todos los valores en un subconjunto pequeño de los datos y elegir el de convergencia más rápida. El término $i^{1/2+\epsilon}$ decae con la iteración para dar pasos cada vez más pequeños como exigen las condiciones de Robbins y Monro para garantizar convergencia. 
+y damos así el paso en el espacio $\mathrm{ELBO}$
+$$
+\theta^{(i)}=\theta^{(i-1)}+\rho^{(i)}g^{(i)}
+$$
+Antes de entrar en más detalle, la ecuación $(14$) muestra la intuición del algoritmo: estando en un punto  $\theta^{(i-1)}$, damos un paso tamaño $\rho^{(i)}$ en la dirección de mayor aumento de $\mathrm{ELBO}$. Este es el algoritmo de *ascenso en gradiente*. Aunque pueda parecer ingenuo, su popularidad se debe a que en gradientes en el formato de $(9)-(11)$, $\nabla_\theta f(\theta) = \mathbb{E}_x[h(x,\theta)]$, podemos aproximar la esperanza con una muestra pequeña (es un estimador de Monte Carlo) y así eficientar el proceso para grandes volúmenes de datos.
+
+En $(12)$, el término $ \eta > 0$ determina la escala de la sucesión de pasos (o tasas de aprendizaje en jerga de aprendizaje). Los autores recomiendan elegir $\eta \in \{0.01, 0.1, 1, 10, 100\}$ usando todos los valores en un subconjunto pequeño de los datos y elegir el de convergencia más rápida. El término $i^{1/2+\epsilon}$ decae con la iteración para dar pasos cada vez más pequeños como exigen las condiciones de Robbins y Monro para garantizar convergencia. 
 
  El último factor se adapta a la curvatura del espacio $\textrm{ELBO}$, que por la reparametrización es distinto al original. Los valores de $s$ guardan la información sobre los gradientes anteriores, y el factor $\alpha$ determina qué tan importante es el valor histórico en comparación con el valor actual. La sucesión $\left(s^{(n)}\right)_{n\in\mathbb{N}}$ converge a un valor no nulo.
 
@@ -183,9 +191,9 @@ advi(data=x, model=p(x,theta), mean_field=TRUE):
 		else:
 			grad_L(ELBO) <- aproximar (11) con integración de MC
 		rho <- calcular con las ecuaciones (12) y (14)
-		mu <- mu + diag(rho)*grad_mu(ELBO)
+		mu <- mu + rho*grad_mu(ELBO)
 		if mean_field:
-			omega <- omega + diag(rho)*grad_omega(ELBO)
+			omega <- omega + rho*grad_omega(ELBO)
 		else
 			L <- L + diag(rho)*grad_L(ELBO)
 	return([mu, omega if mean_field else L])
