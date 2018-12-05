@@ -2,7 +2,7 @@
 
 
 
-ADVI es un algoritmo introducido, entre otros, por Andrew Gelman y David Blei en 2016. En resumen, dada la especificación de un modelo p(x, \theta), ADVI lo transforma a p(x, \zeta) (ajustando por el mapa \theta \mapsto \zeta en la nueva conjunta) donde \zeta \in \mathbb{R}^p. Así elimina las restricciones sobre el parámetro \theta, y es posible fijar \mathscr{Q} de antemano y utilizarla para cualquier modelo. Después, ADVI transforma la función objetivo a un valor esperado sobre la función propuesta, de manera que pueda aproximarse con métodos de Monte Carlo, y resuelve la optimización con una variante de gradient descent.
+ADVI es un algoritmo introducido, entre otros, por Andrew Gelman y David Blei en 2016. En resumen, dada la especificación de un modelo $p(x, \theta)$, ADVI lo transforma a $p(x, \zeta) $(ajustando por el mapa $\theta \mapsto \zeta$ en la nueva conjunta) donde $\zeta \in \mathbb{R}^p$. Así elimina las restricciones sobre el parámetro $\theta$, y es posible fijar $\mathscr{Q}$ de antemano y utilizarla para cualquier modelo. Después, ADVI transforma la función objetivo a un valor esperado sobre la función propuesta, de manera que pueda aproximarse con métodos de Monte Carlo, y resuelve la optimización con una variante de gradient descent.
 
 Comencemos por definir los modelos que ADVI puede resolver: los modelos diferenciables.
 
@@ -72,7 +72,7 @@ En el caso *mean-field*, la adecuada es $S_\phi(\zeta) = \mathrm{diag}(\exp(\ome
 
 > *Demostración*
 >
-> Basta notar que el primer caso es un caso particular del segundo, y el segundo se probó en clase cuando simulamos normales desde normales estándar. _\square
+> Basta notar que el primer caso es un caso particular del segundo, y el segundo se probó en clase cuando simulamos normales desde normales estándar. $_\square$
 
 Así pues, tras aplicar la transformación, la distribución variacional es
 $$
@@ -81,7 +81,7 @@ $$
 
 ###### Definición.
 
-La transformación S_\phi se llama *estandarización elíptica*.
+La transformación $S_\phi$ se llama *estandarización elíptica*.
 
 Esta transformación convierte el problema de optimización en
 $$
@@ -118,7 +118,7 @@ $$
 >
 > Apéndice C. $_\square$
 
-Es por las ecuaciones (9)-(11) que ADVI trabaja con la clase de modelos diferenciables. Nótese que aunque no podíamos calcular el gradiente de la esperanza en (5), sí podemos calcular expresiones complicadas como (9)-(11). Esto se debe a la diferenciación automática (la otra mitad en el nombre de ADVI), que por ser más una genialidad computacional que estadística evitamos aquí entrar en detalles y los desarrollamos en el apéndice B. Basta saber que los gradientes en (9)-(11) son fáciles de evaluar, por lo que podemos usar descenso en gradiente.
+Es por las ecuaciones $(9)-(11)$ que ADVI trabaja con la clase de modelos diferenciables. Nótese que aunque no podíamos calcular el gradiente de la esperanza en (5), sí podemos calcular expresiones complicadas como $(9)-(11)$. Esto se debe a la diferenciación automática (la otra mitad en el nombre de ADVI), que por ser más una genialidad computacional que estadística evitamos aquí entrar en detalles y los desarrollamos en el apéndice B. Basta saber que los gradientes en $(9)-(11)$ son fáciles de evaluar, por lo que podemos usar descenso en gradiente.
 
 #### Una rutina de optimización
 
@@ -126,7 +126,7 @@ Con una forma del gradiente conveniente para los métodos de Monte Carlo, basta 
 
 Los autores de ADVI proponen el siguiente esquema de ascenso en gradiente:
 
-En la iteración i, sean \rho^{(i)} el tamaño del paso y g^{(i)} el gradiente.  Definimos
+En la iteración $i$, sean $\rho^{(i)}$ el tamaño del paso y $g^{(i)}$ el gradiente.  Definimos
 $$
 \rho^{(i)}_k=\eta\times i^{-1/2+\epsilon}\times\left(\tau+\sqrt{s_k^{(i)}}\right)^{-1}
 $$
@@ -143,7 +143,7 @@ Antes de entrar en más detalle, la ecuación $(14$) muestra la intuición del a
 
 En $(12)$, el término $ \eta > 0$ determina la escala de la sucesión de pasos (o tasas de aprendizaje en jerga de aprendizaje). Los autores recomiendan elegir $\eta \in \{0.01, 0.1, 1, 10, 100\}$ usando todos los valores en un subconjunto pequeño de los datos y elegir el de convergencia más rápida. El término $i^{1/2+\epsilon}$ decae con la iteración para dar pasos cada vez más pequeños como exigen las condiciones de Robbins y Monro para garantizar convergencia. 
 
- El último factor se adapta a la curvatura del espacio \textrm{ELBO}, que por la reparametrización es distinto al original. Los valores de s guardan la información sobre los gradientes anteriores, y el factor \alpha determina qué tan importante es el valor histórico en comparación con el valor actual. La sucesión \left(s^{(n)}\right)_{n\in\mathbb{N}} converge a un valor no nulo.
+ El último factor se adapta a la curvatura del espacio $\textrm{ELBO}$, que por la reparametrización es distinto al original. Los valores de $s$ guardan la información sobre los gradientes anteriores, y el factor $\alpha $determina qué tan importante es el valor histórico en comparación con el valor actual. La sucesión $\left(s^{(n)}\right)_{n\in\mathbb{N}}$ converge a un valor no nulo.
 
 Los valores de $\epsilon$ y $\tau$ son para estabilidad numérica, y los autores lo fijan en $10^{-16}$ y $1$ respectivamente. Finalmente podemos presentar el algoritmo.
 
@@ -195,7 +195,7 @@ advi(data=x, model=p(x,theta), mean_field=TRUE):
 	return([mu, omega if mean_field else L])
 ```
 
-Si se usa descenso en gradiente, ADVI tiene complejidad \mathcal{O}(nMp) por iteración, donde n es la cantidad de datos. En la variante estocástica con minibatch, pueden usarse b\ll n  puntos y baja a \mathcal{O}(bMp) para escalar a datos masivos.
+Si se usa descenso en gradiente, ADVI tiene complejidad $\mathcal{O}(nMp)$ por iteración, donde $n$ es la cantidad de datos. En la variante estocástica con minibatch, pueden usarse $b\ll n$  puntos y baja a $\mathcal{O}(bMp) $para escalar a datos masivos.
 
 #### Última nota
 
