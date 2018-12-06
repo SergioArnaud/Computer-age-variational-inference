@@ -94,29 +94,29 @@ $$
 ###### Teorema.
 
 $$
-\begin{eqnarray}
-\nabla_\mu\mathrm{ELBO}(q) &=&
+\begin{align}
+\nabla_\mu\mathrm{ELBO}(q) &=
 	\mathbb{E}_{\xi\sim\mathcal{N}(0,\mathbb{I})}\left[
 	\nabla_\theta\log p(x,\theta)\nabla_\zeta T^{-1}(\zeta) +
 	\nabla_\zeta\log|\mathrm{det}\mathbb{J}_{T^{-1}}(\zeta)|
 	\right] \\ \nonumber \\
 
-\nabla_\omega\mathrm{ELBO}(q) &=& \mathbb{E}_{\xi\sim\mathcal{N}(0,\mathbb{I})}\left[
+\nabla_\omega\mathrm{ELBO}(q) &= \mathbb{E}_{\xi\sim\mathcal{N}(0,\mathbb{I})}\left[
 	(\nabla_\theta\log p(x,\theta)\nabla_\zeta T^{-1}(\zeta) +
 	\nabla_\zeta\log|\mathrm{det}\mathbb{J}_{T^{-1}}(\zeta)|)
 	\xi^\top\mathrm{diag}(\exp(\omega))
 	\right] +1 \\ \nonumber \\
 
-\nabla_L\mathrm{ELBO}(q) &=& \mathbb{E}_{\xi\sim\mathcal{N}(0,\mathbb{I})}\left[
+\nabla_L\mathrm{ELBO}(q) &= \mathbb{E}_{\xi\sim\mathcal{N}(0,\mathbb{I})}\left[
 	(\nabla_\theta\log p(x,\theta)\nabla_\zeta T^{-1}(\zeta) +
 	\nabla_\zeta\log|\mathrm{det}\mathbb{J}_{T^{-1}}(\zeta)|)\xi^\top
 	\right] + (L^{-1})^\top
-\end{eqnarray}
+\end{align}
 $$
 
 > *Demostración*
 >
-> Apéndice C. $_\square$
+> Apéndice C del paper de Gelman. $_\square$
 
 Es por las ecuaciones $(9)-(11)$ que ADVI trabaja con la clase de modelos diferenciables. Nótese que aunque no podíamos calcular el gradiente de la esperanza en (5), sí podemos calcular expresiones complicadas como $(9)-(11)$. Esto se debe a la diferenciación automática (la otra mitad en el nombre de ADVI), que por ser más una genialidad computacional que estadística evitamos aquí entrar en detalles y los desarrollamos en el apéndice B. Basta saber que los gradientes en $(9)-(11)$ son fáciles de evaluar, por lo que podemos usar descenso en gradiente.
 
