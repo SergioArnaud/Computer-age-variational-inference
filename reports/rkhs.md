@@ -11,7 +11,9 @@ $$
 
 ###### Observación.
 
-La matriz $\mathbb{G}$ con $ (\mathbb{G})_{ij} = \mathrm{K}(x_i,x_j) $ también conocida como la *matriz de Gram* es positiva semidefinida.
+La definición 1 es equivalente a pedir que para cualquier conjunto $\{x_1, \cdots , x_n\}\subseteq\mathcal{X}$, la matriz $\mathbb{G}$ con $ (\mathbb{G})_{ij} = \mathrm{K}(x_i,x_j) $ sea (semi) positiva definida
+
+Las siguientes proposiciones presentan formas en que se pueden construir kernels positivos definidosusando otros kernels y productos interiores.
 
 ###### Proposición.
 
@@ -23,11 +25,11 @@ Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ 
 
 ###### Proposición.
 
-Se $\mathrm{K}$ es un kernel positivo definido y $f:\mathcal{X} \to \mathbb{R}$ una función arbitraria, entonces $f(x) \mathrm{K}(x,y)f(y)$ y    $f(x)f(y)$ son positivos definidos.
+Si $\mathrm{K}$ es un kernel positivo definido y $f:\mathcal{X} \to \mathbb{R}$ una función arbitraria, entonces $\tilde{K}(x,y)=f(x) \mathrm{K}(x,y)f(y)$ y  $K'(x,y)=f(x)f(y)$ son positivos definidos.
 
 ###### Proposición.
 
-Sea $(\mathrm{V} , \langle\cdot,\cdot\rangle)$ un espacio vectorial con producto interior, entonces para todo mapeo $\Phi : \mathcal{X} \to \mathrm{V}$, $\langle\Phi(x),\Phi(y)\rangle$ es un kernel definido positivo. 
+Sea $(\mathrm{V} , \langle\cdot,\cdot\rangle)$ un espacio vectorial con producto interior. Para todo mapeo $\Phi : \mathcal{X} \to \mathrm{V}$, $\langle\Phi(x),\Phi(y)\rangle$ es un kernel definido positivo. 
 
 > *Demostración*
 >
@@ -46,8 +48,8 @@ Sea $(\mathrm{V} , \langle\cdot,\cdot\rangle)$ un espacio vectorial con producto
 $$
 \begin{align*}
 \text{Kernel lineal} && \mathrm{K}(x,y) &= x^Ty  \\
-\text{Kernel Gaussiano} && \mathrm{K}(x,y) &= exp\left(-\frac{1}{2\sigma^2}\Vert x-y \Vert^2\right)  \\
-\text{Kernel Laplaciano} && \mathrm{K}(x,y) &= exp\left(-\alpha \sum\limits_{i=1}^n|x_i-y_i|\right) \\
+\text{Kernel Gaussiano} && \mathrm{K}(x,y) &= \exp\left(-\frac{1}{2\sigma^2}\Vert x-y \Vert^2\right)  \\
+\text{Kernel Laplaciano} && \mathrm{K}(x,y) &= \exp\left(-\alpha \sum\limits_{i=1}^n|x_i-y_i|\right) \\
 \end{align*}
 $$
 
@@ -55,17 +57,17 @@ $$
 
 ###### Definición.
 
-Un *Espacio de hilbert con kernel reproductor (RKHS por sus siglas en inglés)* sobre $\mathcal{X}$ es un espacio de Hilbert $\mathcal{H}$   conformado por funciones en $\mathcal{X}$, tal que el mapeo evaluacion
+Un *Espacio de hilbert con kernel reproductor* (RKHS por sus siglas en inglés) sobre $\mathcal{X}$ es un espacio de Hilbert $\mathcal{H}$ conformado por funciones en $\mathcal{X}$, tal que el funcional evaluacion
 $$
 \begin{align*}
 e_x : \mathcal{H} \to \mathbb{K}, && e_x(f) = f(x) 
 \end{align*}
 $$
-es un funcional lineal continuo para toda $x \in \mathcal{X}$.
+es continuo para toda $x \in \mathcal{X}$.
 
 ###### Observación.
 
-Por el teorema de representación de Riesz, $\forall x \in \mathcal{X}$, podemos escribir el funcional lineal $e_x$ de la siguiente forma
+Por el teorema de representación de Riesz, $\forall x \in \mathcal{X}$, podemos escribir el funcional lineal $e_x$ como
 $$
 \begin{align}
 e_x(f) := f(x) = \langle f, K_x\rangle && \forall f \in \mathcal{H}
