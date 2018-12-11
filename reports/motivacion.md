@@ -10,7 +10,7 @@ A continuación mostramos tres de modelos que, dada su complejidad intrínseca, 
 
 ###### Latent Dirichlet allocation (LDA).
 
-LDA es un modelo probabilístico generativo ampliamente utilizado en procesamiento de lenguaje natural para resolver problemas de clasificación de texto y modelado de temas, la idea básica del procedimiento para generar un documento es la siguiente: 
+LDA es un modelo probabilístico generativo que forma parte de los modelos de mezclas Gaussianas, es ampliamente utilizado en procesamiento de lenguaje natural para resolver problemas de clasificación de texto y modelado de temas, la idea básica del procedimiento para generar un documento es la siguiente: 
 
 Supongamos que se tiene un vocabulario de palabras y un conjunto de temas, entonces, para cada tema podemos obtener una distribución de las palabras que aparecen en él. De esta forma, para generar un documento, se elige una distribución de los temas que se van a tratar en el documento y con base en ella se obtiene el conjunto de palabras correspondiente. El modelo probabilístico es el siguiente:
 
@@ -24,42 +24,27 @@ Supongamos que se tiene un vocabulario de palabras y un conjunto de temas, enton
 
    b. Elige una palabra $w_n$ de $p(w_n|z_n,\beta)$, una distribución multinomial condicionada en el tema $z_n$.
 
-###### Modelo de mezcla gaussiana.
-
-Dado un conjunto de observaciones se desea obtener una muestra de la posterior del modelo:
-$$
-p(y \ |\ \theta,\mu,\sigma) = \prod_{n=1}^N\sum_{k=1}^K\theta_k\prod_{d=1}^D \mathscr{N}(y_{nd} | \mu_{kd},\sigma_{kd})
-$$
-Con una _prior_ Dirichlet para las proporciones de la mezcla:
-$$
-p(\theta) = Dir(\theta; \alpha_0)
-$$
-Una _prior_ Gaussiana para las medias de las mezclas:
-$$
-p(\mu) = \prod_{k=1}^{D} \prod_{d=1}^D \mathscr{N}(\mu_{kd};0,1)
-$$
-Y una _prior_ Lognormal para las desviaciones estandar de las mezclas:
-$$
-p(\sigma) = \prod_{k=1}^D \prod_{d=1}^D  \mathrm{Lognormal}(\sigma_{kd};0,1)
-$$
+Una vez especificado el proceso generativo surge el problema de inferencia y estimación de parámetros, 
 
 ###### Componenetes principales probabilísticos con detección automática de relevancia.
 
-Inicialmente, se considera el modelo de componenetes principales probabilísticos (PPCA), supongamos que se tiene un conjunto de datos $\bold{x} = x_{1:n}$ donde cada $x_i \in \mathbb{R^n}$. Sea M<D la dimensión del subespacio buscado, definimos:
+Inicialmente, se considera el modelo de componenetes principales probabilísticos (PPCA), supongamos que se tiene un conjunto de datos $\bold{x} = x_{1:n}$ donde cada $x_i \in \mathbb{R}^n$ . Sea $M<D$ la dimensión del subespacio buscado, definimos:
 $$
-\begin{eqnarray}
-p(\bold{x} | \bold{w},\bold{z},\sigma) &=& \prod_{n=1}^N \mathscr{N}(x_n; \bold{w}z_n,\sigma\mathbb{I}) \\
-p(\bold{z}) &=& \prod_{n=1}^N \mathscr{N}(z_n;0,\mathbb{I}) \\
-p(\bold{w}) &=& \prod_{n=1}^D \mathscr{N}(w_n;0,\mathbb{I}) \\
-p(\sigma) &=& \mathrm{Lognormal}(\sigma;0,1) \\
-\end{eqnarray}
+\begin{align*}
+p(\bold{x} | \bold{w},\bold{z},\sigma) &= \prod_{n=1}^N \mathscr{N}(x_n; \bold{w}z_n,\sigma\mathbb{I}) \\
+p(\bold{z}) &= \prod_{n=1}^N \mathscr{N}(z_n;0,\mathbb{I}) \\
+p(\bold{w}) &= \prod_{n=1}^D \mathscr{N}(w_n;0,\mathbb{I}) \\
+p(\sigma) &= \mathrm{Lognormal}(\sigma;0,1) \\
+\end{align*}
 $$
 Donde $\bold{w} = w_{1:D}$ es  un conjunto de componentes principales
 
 La detección automática de relevancia consiste en extender PPCA al añadir un vector M-dimensional $\bold{\alpha}$ que elige las componentes principales que serán retenidas al añadir:
 $$
-p(\bold{w} | \bold{\alpha}) = \prod_{n=1}^D \mathscr{N}(w_d;0,\sigma \mathrm{diag}(\alpha)) \\
-p(\bold{\alpha}) = \prod_{n=1}^M \mathrm{Invgamma}(\alpha_m;1,1)
+\begin{align*}
+p(\bold{w} | \bold{\alpha}) &= \prod_{n=1}^D \mathscr{N}(w_d;0,\sigma \mathrm{diag}(\alpha)) \\
+p(\bold{\alpha}) &= \prod_{n=1}^M \mathrm{Invgamma}(\alpha_m;1,1)
+\end{align*}
 $$
 
 #### Inferencia variacional

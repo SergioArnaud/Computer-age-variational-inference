@@ -1,2 +1,2 @@
-# proyecto_simulacion
-Final project for simulation class: Automatic differentiation variational inference
+# Computer age variational inference
+Final project for statistical computing class: Algorithms for variational inference.
