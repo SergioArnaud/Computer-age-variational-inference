@@ -17,7 +17,7 @@ Las siguientes proposiciones presentan formas en que se pueden construir kernels
 
 ###### Proposición.
 
-Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}​$ son kernels positivos definidos, entonces los siguientes también lo son
+Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ son kernels positivos definidos, entonces los siguientes también lo son
 
 - $a\mathrm{K}_1 + b\mathrm{K}_2$ con $ a,b \geq 0$
 - $\mathrm{K}_1\mathrm{K}_2$
@@ -26,6 +26,18 @@ Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}�
 ###### Proposición.
 
 Si $\mathrm{K}$ es un kernel positivo definido y $f:\mathcal{X} \to \mathbb{R}$ una función arbitraria, entonces $\tilde{K}(x,y)=f(x) \mathrm{K}(x,y)f(y)$ y  $K'(x,y)=f(x)f(y)$ son positivos definidos.
+
+> *Demostración*
+>
+> Probemos que $\mathrm{K(x,y)} = f(x)f(y)$ es un kernel positivo definido. La simetría es inmediata, asimismo cumple $(1)$ pues
+> $$
+> \begin{align*}
+> \sum_{i=1}^n\sum_{j=1}^n \mathrm{K}(x_i,x_j)c_ic_j &= \sum_{i=1}^n\sum_{j=1}^n f(x_i)f(x_j)c_ic_j \\ \\
+> &= \left(\sum_{i=1}^nf(x_i)c_i \right)^2 \\
+> &\geq 0 
+> \end{align*}
+> $$
+> La prueba de $f(x) \mathrm{K}(x,y)f(y)$ queda como ejercicio al lector. $_\square$ 
 
 ###### Proposición.
 
