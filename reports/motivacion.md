@@ -24,7 +24,7 @@ Supongamos que se tiene un vocabulario de palabras y un conjunto de temas, enton
 
    b. Elige una palabra $w_n$ de $p(w_n|z_n,\beta)$, una distribución multinomial condicionada en el tema $z_n$.
 
-Una vez especificado el proceso generativo surge el problema de inferencia y estimación de parámetros, 
+Una vez especificado el proceso generativo, supongamos que se tiene un conjunto de documentos y se ha fijado $K$, el número de temas que se quieren obtener en los documentos. Entonces el problema de inferencia consiste en intentar *trabajar hacia atras* el proceso generativo, es decir, se requiere que el modelo aprenda la representación de los K temas en cada documento y la distribución de palabras en los tema de forma que se pueda identificar 
 
 ###### Componenetes principales probabilísticos con detección automática de relevancia.
 
