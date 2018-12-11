@@ -9,9 +9,11 @@ $$
 \sum_{i,j=1}^n c_ic_i K(x_i,x_j) \geq 0
 $$
 
+Las siguientes proposiciones presentan formas en que se pueden construir kernels positivos definidos a través de otros kernels y a través de productos interiores.
+
 ###### Proposición.
 
-Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ son kernels positivos definidos, entonces los siguientes también lo son
+Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}​$ son kernels positivos definidos, entonces los siguientes también lo son
 
 - $a\mathrm{K}_1 + b\mathrm{K}_2$ con $ a,b \geq 0$
 - $\mathrm{K}_1\mathrm{K}_2$ 
@@ -19,7 +21,7 @@ Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ 
 
 ###### Proposición.
 
-Se $\mathrm{K}$ es un kernel positivo definido y $f:\mathcal{X} \to \mathbb{R}$ una función arbitraria, entonces $f(x) \mathrm{K}(x,y)f(y)$ y    $f(x)f(y)$ son positivos definidos.
+Si $\mathrm{K}$ es un kernel positivo definido y $f:\mathcal{X} \to \mathbb{R}$ una función arbitraria, entonces $f(x) \mathrm{K}(x,y)f(y)$ y    $f(x)f(y)$ son positivos definidos.
 
 ###### Proposición.
 
