@@ -89,7 +89,9 @@ En particular, $K_x$ es una función en $\mathcal{H}$ de forma que si $y\in\math
 $$
 K_x(y) = \langle K_x, K_y \rangle
 $$
-Con base en la expresión obtenida en $(3)$ surge la siguiente definición.
+###### Definición.
+
+A la propiedad $(2)$ le llamamos *reproducibilidad*. 
 
 ###### Definición.
 
@@ -100,27 +102,14 @@ $$
 \end{align*}
 $$
 
-###### Proposicición.
-
-Sea $\mathcal{H}$ un espacio de Hilbert sobre $\mathcal{X}$, entonces $\forall{x} \in \mathcal{X}$ existe una función $K_x \in \mathcal{H}$ tal que
-$$
-\begin{align}
-\langle f, K_x\rangle = f(x) && \forall f \in \mathcal{H} && (\textit{Propiedad de reproducibilidad})
-\end{align}
-$$
-
-###### Demostración.
-
-> Como se mostró en $(2)$ es una consecuencia directa del teorema de representación de Riesz.
-
-Hemos visto como un RKHS define un *kernel reproductor* - el lector deberá convencerse de que es simétrico y positivo - En consecuencia, todo RKHS define un kernel positivo definido. ¿Será cierta la afirmación conversa? El siguiente teorema resuelve la cuestión afirmativamente, todo kernel positivo definido define de manera única un RKHS.
+Hemos visto como un RKHS define un *kernel reproductor* (el lector deberá convencerse de que es simétrico y positivo), pero cabe cuestionarse si el converso es cierto. La respuesta se debe a Moore.
 
 ###### Teorema (Moore–Aronszajn, 1950)
 
-Sea $\mathrm{K}: \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ un kernel positivo definido, entonces existe un único RKHS $\mathcal{H}_\mathrm{K}$ tal que:
+Sea $\mathrm{K}: \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ un kernel positivo definido. Entonces, existe un único RKHS $\mathcal{H}_\mathrm{K}$ tal que:
 
-- $\mathrm{K}(\cdot,x) \in \mathcal{H}_\mathrm{K} \quad \forall x \in \mathcal{X}$
-- $\mathrm{Span}\{\mathrm{K}(\cdot,x) | x \in \mathcal{X}\}$ es denso en $\mathcal{H}_\mathrm{K}$
+- $\mathrm{K}(\cdot,x):=\mathrm{K}_x \in \mathcal{H}_\mathrm{K} \quad \forall x \in \mathcal{X}$
+- $\mathrm{span}\{\mathrm{K}_x: x \in \mathcal{X}\}$ es denso en $\mathcal{H}_\mathrm{K}$
 - $\mathrm{K}$ es un kernel reproductor de $\mathcal{H}_\mathrm{K}$
 
 ###### Demostración.
@@ -131,4 +120,5 @@ Sea $\mathrm{K}: \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ un kernel positi
 
 ###### Definición.
 
-Sea F un Funcional $F : \mathcal{H} \to \mathbb{K}$ el *gradiente funcional* de $F$ denotado por $\nabla_f F(f)$ es una función en $\mathcal{H}$ tal que $F(f + \epsilon g(x)) = F(f) + \epsilon\langle \nabla_f F(f),g\rangle_{\mathcal{H}} + O(\epsilon^2)$ para cualquier $g \in \mathcal{H}$ y $\epsilon \in \mathbb{R}$
+Sea  $F : \mathcal{H} \to \mathbb{K}$ un funcional. El *gradiente funcional* de $F$ denotado por $\nabla_f F(f)$ es una función en $\mathcal{H}$ tal que $F(f + \epsilon g(x)) = F(f) + \epsilon\langle \nabla_f F(f),g\rangle_{\mathcal{H}} + O(\epsilon^2)$ para cualquier $g \in \mathcal{H}$ y $\epsilon \in \mathbb{R}$
+
