@@ -22,10 +22,18 @@ jupyter:
     version: 3.7.1
 ---
 
-##### Example: Kaggle contest on *Observing Dark World*
+# Ejemplo: 'Observing the Dark World'
 
+```python
+import numpy as np
+import pymc3 as pm
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-A personal motivation for learning Bayesian methods was trying to piece together the winning solution to Kaggle's [*Observing Dark Worlds*](http://www.kaggle.com/c/DarkWorlds) contest. From the contest's website:
+sns.set()
+```
+
+Este ejemplo reproduce la solución ganadora del concurso [*Observing Dark Worlds*](http://www.kaggle.com/c/DarkWorlds) en Kaggle, siguiendo la el libro de [bmh](http://github.com/algo).
 
 
 
@@ -34,24 +42,26 @@ A personal motivation for learning Bayesian methods was trying to piece together
 <img src="http://timsalimans.com/wp-content/uploads/2012/12/dm.jpg" width = 730>
 
 
-The contest required predictions about where dark matter was likely to be. The winner, [Tim Salimans](http://timsalimans.com/), used Bayesian inference to find the best locations for the halos (interestingly, the second-place winner also used Bayesian inference). With Tim's permission, we provided his solution [1] here:
+El problema era prededcir dónde estaba la materia oscura. El ganador, [Tim Salimans](http://timsalimans.com/), usó inferencia bayesiana en su solución:
 
-1. Construct a prior distribution for the halo positions $p(x)$, i.e. formulate our expectations about the halo positions before looking at the data.
-2. Construct a probabilistic model for the data (observed ellipticities of the galaxies) given the positions of the dark matter halos: $p(e | x)$.
-3. Use Bayes’ rule to get the posterior distribution of the halo positions, i.e. use to the data to guess where the dark matter halos might be.
-4. Minimize the expected loss with respect to the posterior distribution over the predictions for the halo positions: $\hat{x} = \arg \min_{\text{prediction} } E_{p(x|e)}[ L( \text{prediction}, x) ]$ , i.e. tune our predictions to be as good as possible for the given error metric.
+1. Construir una prior para la posición de los halos: $p(x)$. 
+2. Construir un modelo para la elipticidad observada de las galaxias dada la posición de los halos: $p(e | x)$.
+3. Actualizar usando Bayes. 
+4. Minimizar la pérdida esperada con respecto a la posterior sobre las predicciones para las posiciones del halo: 
 
-
-
-
-The loss function in this problem is very complicated. For the very determined, the loss function is contained in the file DarkWorldsMetric.py in the parent folder. Though I suggest not reading it all, suffice to say the loss function is about 160 lines of code &mdash; not something that can be written down in a single mathematical line. The loss function attempts to measure the accuracy of prediction, in a Euclidean distance sense, such that no shift-bias is present. More details can be found on the metric's [main page](http://www.kaggle.com/c/DarkWorlds/details/evaluation).
-
-We will attempt to implement Tim's winning solution using PyMC3 and our knowledge of loss functions.
+$$
+\hat{x} = \arg \min_{\text{prediccion} } E_{p(x|e)}[L(\text{prediccion}, x)]
+$$
 
 
-### The Data
 
-The dataset is actually 300 separate files, each representing a sky. In each file, or sky, are between 300 and 720 galaxies. Each galaxy has an $x$ and $y$ position associated with it, ranging from 0 to 4200, and measures of ellipticity: $e_1$ and $e_2$. Information about what these measures mean can be found [here](https://www.kaggle.com/c/DarkWorlds/details/an-introduction-to-ellipticity), but for our purposes it does not matter besides for visualization purposes. Thus a typical sky might look like the following:
+
+La función de pérdida para este problemae es muy complicada. Detalles en su [página](http://www.kaggle.com/c/DarkWorlds/details/evaluation).
+
+
+### Los datos
+
+Son 300 archivos, cada uno representando un cielo. En cada cielo hay entre 300 y 520 galaxias. Cada galaxia tiene una posición $x$ y una $y$, entre 0 y 4200, y medidas de elipticidad $e_1, \ e_2$. Más información [acá](https://www.kaggle.com/c/DarkWorlds/details/an-introduction-to-ellipticity). Por ejemplo, un cielo podría verse así:
 
 ```python
 from draw_sky2 import draw_sky
@@ -63,14 +73,14 @@ Training_Sky%d.csv" % (n_sky),
                       skip_header = 1,
                       delimiter = ",",
                       usecols = [1,2,3,4])
-print("Data on galaxies in sky %d."%n_sky)
-print("position_x, position_y, e_1, e_2 ")
+print(f"Posiciones y elipticidades del cielo {n_sky}.")
+print("posicion_x, posicion_y, e_1, e_2 ")
 print(data[:3])
 
 fig = draw_sky(data)
-plt.title("Galaxy positions and ellipcities of sky %d." % n_sky)
-plt.xlabel("x-position")
-plt.ylabel("y-position");
+plt.title(f"Posiciones y elipticidades del cielo {n_sky}.")
+plt.xlabel("posicion_x")
+plt.ylabel("posicion_y");
 ```
 
 ```python
