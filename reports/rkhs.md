@@ -9,10 +9,6 @@ $$
 \sum_{i,j=1}^n c_ic_i K(x_i,x_j) \geq 0
 $$
 
-###### Observación.
-
-La matriz $\mathbb{G}$ con $ (\mathbb{G})_{ij} = \mathrm{K}(x_i,x_j) $ también conocida como la *matriz de Gram* es positiva semidefinida.
-
 ###### Proposición.
 
 Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ son kernels positivos definidos, entonces los siguientes también lo son
