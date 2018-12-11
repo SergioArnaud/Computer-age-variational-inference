@@ -17,10 +17,10 @@ Las siguientes proposiciones presentan formas en que se pueden construir kernels
 
 ###### Proposición.
 
-Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ son kernels positivos definidos, entonces los siguientes también lo son
+Si $\mathrm{K}_1, \mathrm{K}_2 : \mathcal{X} \times \mathcal{X} \to \mathbb{R}​$ son kernels positivos definidos, entonces los siguientes también lo son
 
 - $a\mathrm{K}_1 + b\mathrm{K}_2$ con $ a,b \geq 0$
-- $\mathrm{K}_1\mathrm{K}_2$ 
+- $\mathrm{K}_1\mathrm{K}_2$
 - $\lim\limits_{i\to\infty}  {K}_i$
 
 ###### Proposición.
@@ -29,7 +29,7 @@ Si $\mathrm{K}$ es un kernel positivo definido y $f:\mathcal{X} \to \mathbb{R}$ 
 
 ###### Proposición.
 
-Sea $(\mathrm{V} , \langle\cdot,\cdot\rangle)$ un espacio vectorial con producto interior. Para todo mapeo $\Phi : \mathcal{X} \to \mathrm{V}$, $\langle\Phi(x),\Phi(y)\rangle$ es un kernel definido positivo. 
+Sea $(\mathrm{V} , \langle\cdot,\cdot\rangle)$ un espacio vectorial con producto interior. Para todo mapeo $\Phi : \mathcal{X} \to \mathrm{V}$, $\langle\Phi(x),\Phi(y)\rangle$ es un kernel definido positivo.
 
 > *Demostración*
 >
@@ -60,7 +60,7 @@ $$
 Un *Espacio de hilbert con kernel reproductor* (RKHS por sus siglas en inglés) sobre $\mathcal{X}$ es un espacio de Hilbert $\mathcal{H}$ conformado por funciones en $\mathcal{X}$, tal que el funcional evaluacion
 $$
 \begin{align*}
-e_x : \mathcal{H} \to \mathbb{K}, && e_x(f) = f(x) 
+e_x : \mathcal{H} \to \mathbb{K}, && e_x(f) = f(x)
 \end{align*}
 $$
 es continuo para toda $x \in \mathcal{X}$.
