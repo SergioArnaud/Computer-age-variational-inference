@@ -1,6 +1,6 @@
 ## SVGD: Stein Variational Gradient Descent
 
-SVGD es un algoritmo determinístico de propósito general para realizar inferencia variacional introducido por Qiang Liu y Dilin Wang en el 2016. En terminos generales, el algoritmo utiliza un resultado teórico que conecta la divergencia de Kullback-Leibler con la discrepancia de Stein para transportar iterativamente un conjunto de partículas hacia la distribución objetivo, esto se lleva a cabo al realizar un proceso de *descenso por gradiente funcional* en un RKHS.
+SVGD es un algoritmo determinístico de propósito general para realizar inferencia variacional introducido por Qiang Liu y Dilin Wang en el 2016. En terminos generales, el algoritmo utiliza un resultado teórico que conecta la divergencia de Kullback-Leibler con la discrepancia de Stein para transportar iterativamente un conjunto de partículas hacia la distribución objetivo, esto se lleva a cabo al realizar un proceso de descenso por gradiente funcional en un RKHS.
 
 ####Discrepancia de Stein y divergencia de Kullback–Leibler
 
@@ -10,13 +10,13 @@ Comencemos por recordar la discrepancia kernelizada de Stein.
 
 ###### Teorema.
 
-Sea $\mathcal{H}$ el RKHS definido por un kernel positivo $\mathrm{K}(x,x')$ en la *clase de Stein de $p$* y consideremos $\phi(x') := \mathbb{E}_{x \sim p} [ \mathcal{A}_q K_{x}(x')]$ donde $\mathcal{A}_q$ es el *operador de Stein*, entonces
+Sea $\mathcal{H}$ el RKHS definido por un kernel positivo $\mathrm{K}(x,x')$ en la *clase de Stein de $p$* y consideremos $\phi(x') := \mathbb{E}_{x \sim q} [ \mathcal{A}_p K_{x}(x')]$ donde $\mathcal{A}_p$ es el *operador de Stein*, entonces
 $$
-\mathbb{S}(p,q) = || \phi ||_{\mathcal{H}}^2
+\mathbb{S}(p,q) = || \phi ||_{\mathcal{H}}
 $$
-Donde $\mathbb{S}(p,q)$ es la discrepancia kernelizada de Stein. Más aún, $\langle f, \phi\rangle_{\mathcal{H}} = \mathbb{E}_{x\sim p}[\text{traza}(\mathcal{A}_qf)]$ de forma que 
+Donde $\mathbb{S}(p,q)$ es la discrepancia kernelizada de Stein. Más aún, $\langle f, \phi\rangle_{\mathcal{H}} = \mathbb{E}_{x\sim q}[\text{traza}(\mathcal{A}_pf)]$ de forma que 
 $$
-\sqrt{\mathbb{S}(p,q)} = \max_{f\in\mathcal{H}}\{\mathbb{E}_{x \sim p}[\text{traza}(\mathcal{A}_qf)] \quad \text{donde} \quad \Vert f \Vert_\mathcal{H} \leq 1 \}
+\mathbb{S}(p,q) = \max_{f\in\mathcal{H}}\{\mathbb{E}_{x \sim q}[\text{traza}(\mathcal{A}_pf)] \quad \text{donde} \quad \Vert f \Vert_\mathcal{H} \leq 1 \}
 $$
 Y el máximo se obtiene cuando  $ f = \frac{\phi}{\Vert \phi \Vert_\mathcal{H}}$ 
 
@@ -24,21 +24,17 @@ El siguiente teorema enuncia una impresionante conexión entre la divergencia de
 
 ###### Teorema.
 
-Sea $T(\theta) = \theta + \epsilon \phi(\theta)$ y $q_T(z)$ la densidad de $z = T(x)$ cuando $x \sim q(x)$, entonces
+Sea $T(\theta) = \theta + \epsilon \phi(\theta)​$ y $q_T(z)​$ la densidad de $z = T(x)​$ cuando $x \sim q​$. Entonces
 $$
 \nabla_{\epsilon} \left.D_{KL}(q_T || p) \right |_{\epsilon = 0} = - \mathbb{E}_{x\sim q}[\text{traza}(\mathcal{A_p}\phi(x))]
 $$
-Donde $\mathcal{A_p}$ es el operador de Stein.
+Donde $\mathcal{A_p}$ es el operador de Stein. $_\square$
 
-> *Demostración*
->
-> Apéndice A del paper de SVGD. $_\square$
-
-Con base en el teorema anterior y la discrepancia de Stein es posible encontrar de forma explícita la dirección de la perturbación que ocasiona el mayor descenso en la divergencia de KL.
+Con base en el teorema anterior y la discrepancia de Stein es posible encontrar de forma explícita la dirección de la perturbación que ocasiona el mayor descenso en la divergencia de Kullback-Leibler.
 
 ###### Corolario
 
-Consideremos todas las direcciones de la perturbación $\phi$ en la bola $\mathcal{B} = \{\phi \in \mathcal{H}: \Vert \phi \Vert_{\mathcal{H}^d}^2\} \leq \mathbb{S}(p,q) \}$, la dirección de mayor descenso de $\nabla_{\epsilon} \left.D_{KL}(q_T || p) \right |_{\epsilon = 0}$ 
+Consideremos todas las direcciones de la perturbación $\phi$ en la bola $\mathcal{B} = \{\phi \in \mathcal{H}: \Vert \phi \Vert_{\mathcal{H}}\leq \mathbb{S}(p,q) \}$, la dirección de mayor descenso de $D_{KL}(q_T || p)$ es
 $$
 \phi_{q,p}^*(\cdot) = \mathbb{E_{x \sim q}}[K_x \nabla_x \log p(x) + \nabla_x K_x]
 $$
@@ -47,15 +43,15 @@ $$
 >
 > Basta recordar que 
 > $$
-> \underset{\phi\in\mathcal{H}}{\mathrm{Argmax}}\{\mathbb{E}_{x \sim p}[\text{traza}(\mathcal{A}_q\phi)], \  \Vert \phi \Vert_\mathcal{H} \leq 1 \} = \frac{\mathbb{E}_{x \sim p} [ \mathcal{A}_q K_{x}(\cdot)]}{\Vert \mathbb{E}_{x \sim p} [ \mathcal{A}_q K_{x}] \Vert^2_{\mathcal{H}}} \nonumber
+> \underset{\phi\in\mathcal{H}}{\arg\max}\{\mathbb{E}_{x \sim q}[\text{traza}(\mathcal{A}_p\phi)], \  \Vert \phi \Vert_\mathcal{H} \leq 1 \} = \frac{\mathbb{E}_{x \sim q} [ \mathcal{A}_p K_{x}(\cdot)]}{\Vert \mathbb{E}_{x \sim q} [ \mathcal{A}_p K_{x}] \Vert^2_{\mathcal{H}}} \nonumber
 > $$
 > Asimismo
 > $$
-> \mathbb{S}(p,q) = \Vert \mathbb{E}_{x \sim p} [ \mathcal{A}_q K_{x}] \Vert^2_{\mathcal{H}} \nonumber
+> \mathbb{S}(p,q) = \Vert \mathbb{E}_{x \sim q} [ \mathcal{A}_p K_{x}] \Vert_{\mathcal{H}} \nonumber
 > $$
 > Luego
 > $$
-> \underset{\phi\in\mathcal{H}}{\mathrm{Argmax}}\{\mathbb{E}_{x \sim p}[\text{traza}(\mathcal{A}_q\phi)], \  \Vert \phi \Vert_\mathcal{H} \leq \mathbb{S}(p,q) \} = \mathbb{E}_{x \sim p} [ \mathcal{A}_q K_{x}(\cdot)] \nonumber
+> \underset{\phi\in\mathcal{H}}{\arg\max}\{\mathbb{E}_{x \sim q}[\text{traza}(\mathcal{A}_p\phi)], \  \Vert \phi \Vert_\mathcal{H} \leq \mathbb{S}(p,q) \} = \mathbb{E}_{x \sim q} [ \mathcal{A}_p K_{x}] \nonumber
 > $$
 > Considerando el resultado $(3)$ concluye la demostración $_\square$ 
 
@@ -140,7 +136,7 @@ Asimismo se puede paralelizar la evaluación de los gradientes y aproximar la su
 
 ¿Qué ocurre si consideramos una muestra inicial de tamaño 1, digamos $\{x_0^0\}$? 
 
-Retomando $(7$ obtenemos 
+Retomando $(7)$ obtenemos 
 $$
 \begin{align*}
 \hat{\phi_{k}^*}(x) &= \frac{1}{n}\sum_{j=1}^n [K(x_j^k,x)\nabla_{x_j^k} \log p(x_j^k) + \nabla_{x_j^k}K(x_j^k,x)] \\ \\
