@@ -109,6 +109,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # IPython
 profile_default/
@@ -151,3 +152,5 @@ dmypy.json
 *.jl.*.cov
 *.jl.mem
 deps/deps.jl
+
+*.html
