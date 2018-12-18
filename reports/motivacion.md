@@ -24,25 +24,33 @@ Supongamos que se tiene un vocabulario de palabras y un conjunto de temas, enton
 
    b. Elige una palabra $w_n$ de $p(w_n|z_n,\beta)$, una distribución multinomial condicionada en el tema $z_n$.
 
-Una vez especificado el proceso generativo, supongamos que se tiene un conjunto de documentos y se ha fijado $K$, el número de temas que se quieren obtener en los documentos. Entonces el problema de inferencia consiste en intentar *trabajar hacia atras* el proceso generativo, es decir, se requiere que el modelo aprenda la representación de los K temas en cada documento y la distribución de palabras en los tema de forma que se pueda identificar 
+Una vez especificado el proceso generativo, supongamos que se tiene un conjunto de documentos y se ha fijado $K$, el número de temas que se quieren obtener en los documentos. Entonces el problema de inferencia consiste en intentar *trabajar hacia atras* el proceso generativo, es decir, se requiere que el modelo aprenda la representación de los K temas en cada documento y la distribución de palabras en los tema de forma que se pueda identificar.
 
 ###### Componenetes principales probabilísticos con detección automática de relevancia.
 
-Inicialmente, se considera el modelo de componenetes principales probabilísticos (PPCA), supongamos que se tiene un conjunto de datos $\bold{x} = x_{1:n}$ donde cada $x_i \in \mathbb{R}^n$ . Sea $M<D$ la dimensión del subespacio buscado, definimos:
+PPCA es una generalización bayesiana de el análisis de componenetes principales (PCA). Supongamos que se tiene un conjunto de datos $\bold{x} = x_{1:n}$ donde cada $x_i \in \mathbb{R}^n$ y sea $M<D$ la dimensión del subespacio buscado. Comenzamos por definir un conjunto de variables latentes $\mathbf{z} = z_{1:N}$, $z_i \in \R^m$   
 $$
-\begin{align*}
-p(\bold{x} | \bold{w},\bold{z},\sigma) &= \prod_{n=1}^N \mathscr{N}(x_n; \bold{w}z_n,\sigma\mathbb{I}) \\
-p(\bold{z}) &= \prod_{n=1}^N \mathscr{N}(z_n;0,\mathbb{I}) \\
-p(\bold{w}) &= \prod_{n=1}^D \mathscr{N}(w_n;0,\mathbb{I}) \\
-p(\sigma) &= \mathrm{Lognormal}(\sigma;0,1) \\
-\end{align*}
+p(\bold{z}) = \prod_{n=1}^N \mathcal{N}(z_n;0,\mathbb{I}) \nonumber
 $$
-Donde $\bold{w} = w_{1:D}$ es  un conjunto de componentes principales
+Posteriormente, definimos el conjunto de componentes principales $\mathbf{w} = w_{1:D}$ con $w_i \in \R^M$   
+$$
+p(\bold{w}) = \prod_{n=1}^D \mathcal{N}(w_n;0,\mathbb{I}) \nonumber
+$$
+Asi pues, definimos la verosimilitud
+$$
+p(\bold{x} | \bold{w},\bold{z},\sigma) = \prod_{n=1}^N \mathcal{N}(x_n; \bold{w}z_n,\sigma\mathbb{I})
+$$
+Donde la desviación estandar $\sigma$ también es una variable latente, en este caso utilizamos una prior lognormal
+$$
+p(\sigma) = \mathrm{Lognormal}(\sigma;0,1)
+$$
+Sin embargo, como su contraparte clásica PPCA no identifica cuántas componenter principales utilizar para el subespacio, para resolver esto se propone la determinación automática de relevancia(ARD) como una extensión. 
 
-La detección automática de relevancia consiste en extender PPCA al añadir un vector M-dimensional $\bold{\alpha}$ que elige las componentes principales que serán retenidas al añadir:
+PPCA con ARD idenfica las dimesiones latentes que explican de mejor forma la variabilidad de los datos. para ello comienza por suponer que que hay D dimensiones latentes (i.e. la misma dimensión que los datos) e impone una prior jerárquica que asegura dispersión al añadir un vector M-dimensional $\bold{\alpha}$ 
+
 $$
 \begin{align*}
-p(\bold{w} | \bold{\alpha}) &= \prod_{n=1}^D \mathscr{N}(w_d;0,\sigma \mathrm{diag}(\alpha)) \\
+p(\bold{w} | \bold{\alpha}) &= \prod_{n=1}^D \mathcal{N}(w_d;0,\sigma \mathrm{diag}(\alpha)) \\
 p(\bold{\alpha}) &= \prod_{n=1}^M \mathrm{Invgamma}(\alpha_m;1,1)
 \end{align*}
 $$
