@@ -28,32 +28,11 @@ Una vez especificado el proceso generativo, supongamos que se tiene un conjunto 
 
 ###### Componenetes principales probabilísticos con detección automática de relevancia.
 
-PPCA es una generalización bayesiana de el análisis de componenetes principales (PCA). Supongamos que se tiene un conjunto de datos $\bold{x} = x_{1:n}$ donde cada $x_i \in \mathbb{R}^n$ y sea $M<D$ la dimensión del subespacio buscado. Comenzamos por definir un conjunto de variables latentes $\mathbf{z} = z_{1:N}$, $z_i \in \R^m$   
-$$
-p(\bold{z}) = \prod_{n=1}^N \mathcal{N}(z_n;0,\mathbb{I}) \nonumber
-$$
-Posteriormente, definimos el conjunto de componentes principales $\mathbf{w} = w_{1:D}$ con $w_i \in \R^M$   
-$$
-p(\bold{w}) = \prod_{n=1}^D \mathcal{N}(w_n;0,\mathbb{I}) \nonumber
-$$
-Asi pues, definimos la verosimilitud
-$$
-p(\bold{x} | \bold{w},\bold{z},\sigma) = \prod_{n=1}^N \mathcal{N}(x_n; \bold{w}z_n,\sigma\mathbb{I})
-$$
-Donde la desviación estandar $\sigma$ también es una variable latente, en este caso utilizamos una prior lognormal
-$$
-p(\sigma) = \mathrm{Lognormal}(\sigma;0,1)
-$$
-Sin embargo, como su contraparte clásica PPCA no identifica cuántas componenter principales utilizar para el subespacio, para resolver esto se propone la determinación automática de relevancia(ARD) como una extensión. 
+PPCA es una generalización bayesiana del análisis de componenetes principales (PCA) utilizada como técnida de reducción de dimensión. Supongamos que se tiene un conjunto de datos $\bold{x} = x_{1:N}$ donde cada $x_i \in \mathbb{R}^D$ y sea $M<D​$ el número de componentes principales a obtener, es decir, el número de dimensiones en el subespacio de dimensión reducida. 
 
-PPCA con ARD idenfica las dimesiones latentes que explican de mejor forma la variabilidad de los datos. para ello comienza por suponer que que hay D dimensiones latentes (i.e. la misma dimensión que los datos) e impone una prior jerárquica que asegura dispersión al añadir un vector M-dimensional $\bold{\alpha}$ 
+Al igual que su contraparte clásica, PPCA no identifica cuántas componentes principales utilizar para la obtención del subespacio, para resolver esto se propone la determinación automática de relevancia (ARD) como una extensión.
 
-$$
-\begin{align*}
-p(\bold{w} | \bold{\alpha}) &= \prod_{n=1}^D \mathcal{N}(w_d;0,\sigma \mathrm{diag}(\alpha)) \\
-p(\bold{\alpha}) &= \prod_{n=1}^M \mathrm{Invgamma}(\alpha_m;1,1)
-\end{align*}
-$$
+PPCA con ARD idenfica las dimesiones latentes que explican de mejor forma la variabilidad de los datos. Para ello comienza por suponer que que hay D dimensiones latentes (i.e. la misma dimensión que los datos) e impone una prior jerárquica que pririza la dispersión. En consecuencia , el modelo únicamente utiliza un subconjunto de las dimensiones latentes para describir los datos.
 
 #### Inferencia variacional
 
