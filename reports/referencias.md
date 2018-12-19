@@ -1,3 +1,5 @@
+## Referencias
+
 [1] Baydin, A. G., Pearlmutter, B. A., Radul, A. A., & Siskind, J. M. (2018). Automatic Differentiation in Machine Learning: A Survey. *Journal of Machine Learning Research,* 18 , 1-43.
 
 [2] Vehtari, A., Gelman, A., & Gabry, J. (2017). Pareto Smoothed Importance Sampling. *Department of Statistics, Columbia University, New York.*
@@ -15,3 +17,4 @@ model evaluation. *ICML*.
 
 [8] Liu, Qiang. (2017). Stein variational gradient descent as gradient flow. arXiv preprint arXiv:1704.07520.
 
+[9] N. Aronszajn. Theory of reproducing kernels. Trans. Am. Math. Soc., 68:337 – 404, 1950.
