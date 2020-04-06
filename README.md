@@ -5,4 +5,4 @@ A project presenting the variational inference framework as well as two state of
 - Automatic Differentiation Variational Inference(ADVI)
 - Stein Variational Gradient Descent (SVGD) 
 
-The paper can be downloaded [here](https://github.com/SergioArnaud/Computer-age-variational-inference/blob/master/reports/proyecto_variational_inference.pdf)
+Our paper can be downloaded [here](https://github.com/SergioArnaud/Computer-age-variational-inference/blob/master/reports/proyecto_variational_inference.pdf)
